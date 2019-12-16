@@ -1,0 +1,57 @@
+﻿<Window x:Class="Projekt_win_ocr.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Projekt_win_ocr.MyViewModelNS"
+        xmlns:local="clr-namespace:Projekt_win_ocr"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="510" Width="800">
+    <Window.DataContext>
+        <vm:MyViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <Button x:Name="FileButton" Content="..." HorizontalAlignment="Left" Margin="250,24,0,0" VerticalAlignment="Top" Width="14" Command="{Binding FileButtonClick}" Background="Lavender"/>
+        <Label Content="Input File" HorizontalAlignment="Left" Margin="10,22,0,0" VerticalAlignment="Top" Height="26" Width="115" />
+        <TextBox x:Name="InPathTextBox" HorizontalAlignment="Left" Height="18" Margin="126,25,0,0" TextWrapping="Wrap" Text="{Binding Path}" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+
+        <Button x:Name="DirButton" Content="..." HorizontalAlignment="Left" Margin="250,51,0,0" VerticalAlignment="Top" Width="14" Command="{Binding DirButtonClick}" Background="Lavender"/>
+        <Label Content="Out Path" HorizontalAlignment="Left" Margin="10,48,0,0" VerticalAlignment="Top" Height="26" Width="115"/>
+        <TextBox x:Name="OutPathTextBox" HorizontalAlignment="Left" Height="18" Margin="126,52,0,0" TextWrapping="Wrap" Text="{Binding OutPath}" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+
+        <Label Content="Out File" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Height="26" Width="115"/>
+        <TextBox x:Name="OutFileTextBox" HorizontalAlignment="Left" Height="18" Margin="126,79,0,0" TextWrapping="Wrap" Text="{Binding OutFile}" VerticalAlignment="Top" Width="138" IsEnabled="True"/>
+
+        <Button x:Name="ConvertButton" Content="Convert" HorizontalAlignment="Left" Margin="10,452,0,0" VerticalAlignment="Top" Width="254" Command="{Binding ConvertButtonClick}" Background="Lavender" />
+        <TextBlock AllowDrop="True" HorizontalAlignment="Left" Margin="287,24,0,0" TextWrapping="Wrap" Text="{Binding ReadText}" VerticalAlignment="Top" Height="423" Width="497" Background="Lavender"/>
+        <Label Content="OCR Type" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Height="50" Width="254" Background="Lavender"/>
+        <RadioButton Content="Basic Mode" HorizontalAlignment="Left" Margin="126,133,0,0" VerticalAlignment="Top" IsChecked="{Binding BasicMode}"/>
+        <RadioButton Content="Advanced Mode" HorizontalAlignment="Left" Margin="126,153,0,0" VerticalAlignment="Top" IsChecked="{Binding AdvancedMode}"/>
+
+        <Label Content="Lnaguage" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Height="26" Width="115"/>
+
+        <ComboBox SelectedItem="{Binding Language}" Margin="126,102,0,0" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="138">
+            <ComboBoxItem IsSelected="True">English</ComboBoxItem>
+            <ComboBoxItem>Korean</ComboBoxItem>
+            <ComboBoxItem>Polish</ComboBoxItem>
+        </ComboBox>
+
+        <StackPanel HorizontalAlignment="Left" Height="262" Margin="10,185,0,0" VerticalAlignment="Top" Width="254" Background="Lavender" IsEnabled="{Binding AdvancedMode}">
+            <Label Content="Advanced Settings" Margin="0,0,143,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="109"/>
+            <CheckBox Content="Clean background noise" Margin="10,0,0,0" IsChecked="{Binding CleanBackgroundNoise}"/>
+            <CheckBox Content="Enhance contrast" Margin="10,0,0,0" IsChecked="{Binding EnhanceContrast}"/>
+            <CheckBox Content="Enhance resolution" Margin="10,0,0,0" IsChecked="{Binding EnhanceResolution}"/>
+            <CheckBox Content="Detect white text on black background" Margin="10,0,0,0" IsChecked="{Binding DetectWhiteTextOnDarkBackgrounds}"/>
+            <CheckBox Content="Rotate and straighten" Margin="10,0,0,0" IsChecked="{Binding RotateAndStraighten}"/>
+            <CheckBox Content="Read bar codes" Margin="10,0,0,0" IsChecked="{Binding ReadBarCodes}"/>
+
+            <Label Content="Ocr Strategy" Margin="0,0,143.4,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="109"/>
+            <ComboBox SelectedItem="{Binding Strategy}" Margin="10,0,10.4,0">
+                <ComboBoxItem Content="Advanced"/>
+                <ComboBoxItem Content="Fast"/>
+            </ComboBox>
+        </StackPanel>
+
+    </Grid>
+</Window>
