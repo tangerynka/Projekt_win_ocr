@@ -1,0 +1,18 @@
+﻿<Window x:Class="Projekt_win_ocr.WaitingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projekt_win_ocr"
+        ContentRendered="Window_ContentRendered"
+        mc:Ignorable="d"
+        Title="Conversion" Height="110.9" Width="308.413">
+    <Grid Margin="0,0,0.4,5.4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ProgressBar x:Name="pbStatus" HorizontalAlignment="Left" Height="22" Margin="10,36,0,0" VerticalAlignment="Top" Width="276" RenderTransformOrigin="0.483,2.313"/>
+        <Label Content="    Please wait. Your document is being converted." HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="276"/>
+
+    </Grid>
+</Window>

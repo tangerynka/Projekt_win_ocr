@@ -4,14 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Projekt_win_ocr.MyViewModelNS"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:beh="clr-namespace:Projekt_win_ocr.SetSource"
         xmlns:local="clr-namespace:Projekt_win_ocr"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"  
         mc:Ignorable="d"
         Title="MainWindow" Height="510" Width="800">
     <Window.DataContext>
         <vm:MyViewModel />
     </Window.DataContext>
 
-    <Grid>
+    <Grid IsEnabled="{Binding EnabledWindow}">
         <Button x:Name="FileButton" Content="..." HorizontalAlignment="Left" Margin="250,24,0,0" VerticalAlignment="Top" Width="14" Command="{Binding FileButtonClick}" Background="Lavender"/>
         <Label Content="Input File" HorizontalAlignment="Left" Margin="10,22,0,0" VerticalAlignment="Top" Height="26" Width="115" />
         <TextBox x:Name="InPathTextBox" HorizontalAlignment="Left" Height="18" Margin="126,25,0,0" TextWrapping="Wrap" Text="{Binding Path}" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
@@ -24,7 +27,7 @@
         <TextBox x:Name="OutFileTextBox" HorizontalAlignment="Left" Height="18" Margin="126,79,0,0" TextWrapping="Wrap" Text="{Binding OutFile}" VerticalAlignment="Top" Width="138" IsEnabled="True"/>
 
         <Button x:Name="ConvertButton" Content="Convert" HorizontalAlignment="Left" Margin="10,452,0,0" VerticalAlignment="Top" Width="254" Command="{Binding ConvertButtonClick}" Background="Lavender" />
-        <TextBlock AllowDrop="True" HorizontalAlignment="Left" Margin="287,24,0,0" TextWrapping="Wrap" Text="{Binding ReadText}" VerticalAlignment="Top" Height="423" Width="497" Background="Lavender"/>
+        <!--<TextBlock AllowDrop="True" HorizontalAlignment="Left" Margin="287,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="423" Width="497" Background="Lavender"><Run Text="ReadText"/></TextBlock>-->
         <Label Content="OCR Type" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Height="50" Width="254" Background="Lavender"/>
         <RadioButton Content="Basic Mode" HorizontalAlignment="Left" Margin="126,133,0,0" VerticalAlignment="Top" IsChecked="{Binding BasicMode}"/>
         <RadioButton Content="Advanced Mode" HorizontalAlignment="Left" Margin="126,153,0,0" VerticalAlignment="Top" IsChecked="{Binding AdvancedMode}"/>
@@ -48,10 +51,30 @@
 
             <Label Content="Ocr Strategy" Margin="0,0,143.4,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="109"/>
             <ComboBox SelectedItem="{Binding Strategy}" Margin="10,0,10.4,0">
-                <ComboBoxItem Content="Advanced"/>
+                <ComboBoxItem IsSelected="True" Content="Advanced"/>
                 <ComboBoxItem Content="Fast"/>
             </ComboBox>
         </StackPanel>
+
+        <!--<Label x:Name="ViewerLabel"  HorizontalAlignment="Left" Margin="287,446,0,0" VerticalAlignment="Top" Width="497" Height="25" Content="{Binding ViewerPath}">
+        </Label>
+        <WebBrowser x:Name="pdfWebViewer" Margin="287,25,9.6,33.8" Source="about:blank" />
+        <Button x:Name="ViewerButton" Content="Refresh Viewer" HorizontalAlignment="Left" Margin="494,6,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>-->
+        
+        <WebBrowser x:Name="pdfWebViewer" Margin="287,25,9.6,33.8" Source="about:blank" beh:SetSourceBehavior.Document="{Binding ViewerPath}" IsEnabled="{Binding ViewerEnabled}"/>
+        
+
+            <!--<Label.Content>
+                <MultiBinding StringFormat="{}{0}">
+                    <Binding Path="ViewerPath" Mode="OneWay" />
+                    <Binding Path="ViewerPathAux" Mode="OneWayToSource" UpdateSourceTrigger="PropertyChanged"/>
+                </MultiBinding>
+            </Label.Content>-->
+        <!--<TextBlock Margin="434,447,187.6,13.8" >
+            <TextBlock.Text>
+                
+            </TextBlock.Text>
+        </TextBlock>-->
 
     </Grid>
 </Window>

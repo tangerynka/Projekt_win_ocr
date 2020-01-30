@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -22,10 +21,14 @@ namespace Projekt_win_ocr.MyViewModelNS
         public ICommand FileButtonClick{ get; set; }
         public ICommand DirButtonClick{ get; set; }
         public ICommand ConvertButtonClick{ get; set; }
+
+        private bool _enabledWindow = true;
+        private bool _viewerEnabled = true;
         private string _path;
         private string _outPath;
         private string _outFile;
         private string _readText;
+        private string _viewerPath;
         private bool _basicMode = true;
         private bool _advancedMode;
         
@@ -37,7 +40,34 @@ namespace Projekt_win_ocr.MyViewModelNS
         private bool _readBarCodes;
         private string _language = "English";
         private string _strategy = "Advanced";
-        
+        public string ViewerPath
+        {
+            get { return _viewerPath; }
+            set
+            {
+                _viewerPath = value;
+                NotifyPropertyChanged("ViewerPath");
+                //SetSource.SetSourceBehavior.ChangeAddress();
+            }
+        }
+        public bool ViewerEnabled
+        {
+            get { return _viewerEnabled; }
+            set
+            {
+                _viewerEnabled = value;
+                NotifyPropertyChanged("ViewerEnabled");
+            }
+        }
+        public bool EnabledWindow
+        {
+            get { return _enabledWindow; }
+            set
+            {
+                _enabledWindow = value;
+                NotifyPropertyChanged("EnabledWindow");
+            }
+        }
         public string Path
         {
             get { return _path; }
@@ -152,7 +182,11 @@ namespace Projekt_win_ocr.MyViewModelNS
             get { return _language; }
             set
             {
-                _language = value;
+                var tmp = value.Split(' ');
+                if (tmp.Length > 1) 
+                    _language = tmp[1];
+                else 
+                    _language = value;
                 NotifyPropertyChanged("Language");
             }
         }
@@ -161,7 +195,11 @@ namespace Projekt_win_ocr.MyViewModelNS
             get { return _strategy; }
             set
             {
-                _strategy = value;
+                var tmp = value.Split(' ');
+                if (tmp.Length > 1)
+                    _strategy = tmp[1];
+                else
+                    _strategy = value;
                 NotifyPropertyChanged("Strategy");
             }
         }
@@ -183,7 +221,11 @@ namespace Projekt_win_ocr.MyViewModelNS
             {
                 Path = openFileDialog.FileName;
                 OutPath = openFileDialog.FileName.Substring(0, openFileDialog.FileName.LastIndexOf("\\")+1);
-                OutFile = "OCR_" + openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf("\\") + 1, openFileDialog.FileName.LastIndexOf(".pdf")-3); //TODO
+                OutFile = "OCR_" + openFileDialog.FileName.Substring(openFileDialog.FileName.LastIndexOf("\\") + 1, openFileDialog.FileName.LastIndexOf(".pdf")-3);
+                //ViewerPath = Path;
+                //PdfViewerWindow pwin = new PdfViewerWindow();
+                //pwin.SetSource(ViewerPath);
+                //pwin.Show();
             }
         }
         private void DirButtonClk(object sender)
@@ -196,11 +238,33 @@ namespace Projekt_win_ocr.MyViewModelNS
                 }
             }
         }
-        private void ConvertButtonClk(object sender)
+        private async void ConvertButtonClk(object sender)
         {
-            ReadText = model.ConvertPDF(Path, AdvancedMode, BasicMode, CleanBackgroundNoise, EnhanceContrast, EnhanceResolution, Language, DetectWhiteTextOnDarkBackgrounds, RotateAndStraighten, ReadBarCodes);
+            //Encoding Utf8 = Encoding.UTF8;
+            //ViewerPath = "about:blank";
+            ViewerEnabled = false;
+            EnabledWindow = false;
+            if (Path == null || OutPath == null || OutFile == null)
+            {
+                MessageBox.Show("Please specify all paths and names.");
+                return;
+            }
+            WaitingWindow win = new WaitingWindow();
+            win.Show();
+            win.Topmost = true;
+            ReadText = await Task<string>.Run(() => model.ConvertPDF(Path, AdvancedMode, BasicMode, CleanBackgroundNoise, EnhanceContrast, EnhanceResolution, Language, Strategy, DetectWhiteTextOnDarkBackgrounds, RotateAndStraighten, ReadBarCodes));
+            //byte[] utf8Bytes = Utf8.GetBytes(ReadText);
+            //ReadText = Utf8.GetString(utf8Bytes);
+            win.ConversionDone();
             model.SavePDF(OutPath, OutFile, ReadText);
+            EnabledWindow = true;
+            ViewerEnabled = true;
+            ViewerPath = OutPath + OutFile + ".pdf";
+            //PdfViewerWindow pwin = new PdfViewerWindow();
+            //pwin.SetSource(ViewerPath);
+            //pwin.Show();
         }
+
 
     }
 }

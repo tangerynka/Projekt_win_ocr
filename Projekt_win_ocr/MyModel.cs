@@ -16,8 +16,13 @@ namespace Projekt_win_ocr.MyModelNS
             {"Korean", IronOcr.Languages.Korean.OcrLanguagePack },
             {"Polish", IronOcr.Languages.Polish.OcrLanguagePack }
         };
+        public Dictionary<string, IronOcr.AdvancedOcr.OcrStrategy> strategies = new Dictionary<string, IronOcr.AdvancedOcr.OcrStrategy>()
+        {
+            {"Advanced", IronOcr.AdvancedOcr.OcrStrategy.Advanced },
+            {"Fast", IronOcr.AdvancedOcr.OcrStrategy.Fast},
+        };
 
-        public string ConvertPDF(string path, bool adv, bool bsc, bool _cleanBackgroundNoise, bool _enhanceContrast, bool _enhanceResolution, string language, bool _detectWhiteTextOnDarkBackgrounds, bool _rotateAndStraighten, bool _readBarCodes)
+        public string ConvertPDF(string path, bool adv, bool bsc, bool _cleanBackgroundNoise, bool _enhanceContrast, bool _enhanceResolution, string language, string strategy, bool _detectWhiteTextOnDarkBackgrounds, bool _rotateAndStraighten, bool _readBarCodes)
         {
             if (bsc)
             {
@@ -25,7 +30,7 @@ namespace Projekt_win_ocr.MyModelNS
             }
             else if (adv)
             {
-                return ConvertAdvanced(path, _cleanBackgroundNoise, _enhanceContrast, _enhanceResolution, language, _detectWhiteTextOnDarkBackgrounds, _rotateAndStraighten,_readBarCodes);
+                return ConvertAdvanced(path, _cleanBackgroundNoise, _enhanceContrast, _enhanceResolution, language, strategy, _detectWhiteTextOnDarkBackgrounds, _rotateAndStraighten,_readBarCodes);
             }
             else return null;
             
@@ -39,7 +44,7 @@ namespace Projekt_win_ocr.MyModelNS
                 EnhanceContrast = _enhanceContrast,
                 EnhanceResolution = _enhanceResolution,
                 Language = languages[language],
-                Strategy = IronOcr.AdvancedOcr.OcrStrategy.Advanced,
+                Strategy = strategies[strategy],
                 ColorSpace = AdvancedOcr.OcrColorSpace.Color,
                 DetectWhiteTextOnDarkBackgrounds = _detectWhiteTextOnDarkBackgrounds,
                 InputImageType = AdvancedOcr.InputTypes.AutoDetect,
